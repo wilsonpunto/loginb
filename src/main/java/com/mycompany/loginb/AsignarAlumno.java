@@ -7,6 +7,8 @@ package com.mycompany.loginb;
 
 
 
+import static com.mycompany.loginb.Loginb.validarInscritos;
+import java.util.Collections;
 import javax.swing.JOptionPane;
 
 
@@ -164,19 +166,13 @@ public class AsignarAlumno extends javax.swing.JFrame {
             }
         }
        
-        if(cursoSeleccionado!=null && alumnoSeleccionado!=null){
-            if (!Loginb.validarCursos(alumnoSeleccionado.carne)) {
+    if(cursoSeleccionado!=null && alumnoSeleccionado!=null){
+      if (Loginb.validarCursos(cursoSeleccionado) && validarInscritos(alumnoSeleccionado)) {
             cursoSeleccionado.Alumnos.add(alumnoSeleccionado);
             BinManager.guardarCursos(Loginb.Cursos);
-           
-            JOptionPane.showMessageDialog(this, "Alumno asignado exitosamente.");
-            /*Curso.contadorCurso(alumnoSeleccionado.carne, nombreCurso);*/
-            }else{
-                JOptionPane.showMessageDialog(this, "El alumno ya está inscrito en el máximo de cursos (5).");
-            }
+            JOptionPane.showMessageDialog(this, "Alumno asignado exitosamente.");    
         }
-        
-
+       }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

@@ -8,6 +8,7 @@ import com.mycompany.loginb.BinManager;
 import com.mycompany.loginb.Curso;
 import com.mycompany.loginb.Loginb;
 import static com.mycompany.loginb.Loginb.validarCursos;
+import static com.mycompany.loginb.Loginb.validarInscritos;
 import javax.swing.JOptionPane;
 
 /**
@@ -144,13 +145,13 @@ public class AsignarCurso extends javax.swing.JFrame {
        
 
         if(cursoSeleccionado!=null){
-            if (!Loginb.validarCursos(Loginb.alumnoLogeado.carne)) {
+            if (Loginb.validarCursos(cursoSeleccionado) && validarInscritos(Loginb.alumnoLogeado)) {
                 cursoSeleccionado.Alumnos.add(Loginb.alumnoLogeado);
                 BinManager.guardarCursos(Loginb.Cursos);
                 /*Curso.contadorCurso(Loginb.alumnoLogeado.carne, nombreCurso);*/
                 JOptionPane.showMessageDialog(this, "Alumno asignado exitosamente.");
             }else{
-                JOptionPane.showMessageDialog(this, "El alumno ya está inscrito en el máximo de cursos (5).");
+                JOptionPane.showMessageDialog(this, "El alusdfsd5).");
             }
             // Detiene la ejecución del método.return;
         }

@@ -8,9 +8,11 @@ package com.mycompany.loginb;
 import static com.mycompany.loginb.Curso.contadorCurso;
 import static com.mycompany.loginb.Curso.cursosPorAlumno;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
     /**
@@ -62,10 +64,10 @@ import javax.swing.JPanel;
 
         }   
       
-        public static boolean validarCursos(String carneAlumno) {
+       /* public static boolean validarCursos(String carneAlumno) {
         ArrayList<String> cursosActuales = cursosPorAlumno.getOrDefault(carneAlumno, new ArrayList<>());
         return cursosActuales.size() >= 5;
-    }
+    }*/
 
         public static List<Curso> buscarCursosAlumno(Alumno alumno) {
         List<Curso> cursosAlumno = new ArrayList<>();
@@ -118,7 +120,27 @@ import javax.swing.JPanel;
         return null; // alumno no encontrado
     }
       
-
+        public static boolean validarCursos(Curso curso) {
+        // validar límite de 10 alumnos por curso
+        if (curso.Alumnos.size() >= 10) {
+            JOptionPane.showMessageDialog(null, "El curso ya tiene el máximo de alumnos permitidos (10).");
+            return false;
+        }
+        return true; 
+}    
+        public static boolean validarInscritos(Alumno alumno) {
+        
+          // validar límite de 5 inscripciones por alumno en todos los cursos
+        int contadorInscripciones = 0;
+        for (Curso c : Loginb.Cursos) {
+            contadorInscripciones += Collections.frequency(c.Alumnos, alumno); // Contar cuántas veces aparece el alumno en cada curso
+            if (contadorInscripciones >= 5) {
+                JOptionPane.showMessageDialog(null, "El alumno ya está inscrito al máximo de cursos permitidos (5)");
+                return false;
+            }
+        }
+        return true; 
+}
 
 
 

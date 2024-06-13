@@ -7,6 +7,7 @@ package com.mycompany.loginb;
 import com.mycompany.loginb.Estudiante.Perfil;
 import com.mycompany.loginb.Estudiante.AsignarCurso;
 import com.mycompany.loginb.Estudiante.ConsultarCurso;
+import static com.mycompany.loginb.Loginb.validarInscritos;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -314,15 +315,12 @@ public class BienvenidaAlumno extends javax.swing.JFrame {
         }
 
         if(cursoSeleccionado!=null){
-            if (!Loginb.validarCursos(Loginb.alumnoLogeado.carne)) {
+            if (Loginb.validarCursos(cursoSeleccionado) && validarInscritos(Loginb.alumnoLogeado)) {
                 cursoSeleccionado.Alumnos.add(Loginb.alumnoLogeado);
                 BinManager.guardarCursos(Loginb.Cursos);
-                /*Curso.contadorCurso(Loginb.alumnoLogeado.carne, nombreCurso);*/
                 JOptionPane.showMessageDialog(this, "Alumno asignado exitosamente.");
-            }else{
-                JOptionPane.showMessageDialog(this, "El alumno ya está inscrito en el máximo de cursos (5).");
             }
-            // Detiene la ejecución del método.return;
+            
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
