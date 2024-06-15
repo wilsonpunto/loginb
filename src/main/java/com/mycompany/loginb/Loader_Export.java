@@ -19,6 +19,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -39,7 +40,7 @@ import java.util.List;
  * @author wil
  */
 public class Loader_Export {
-    public static void loaderAlumnosXML() {
+    public static void loaderAlumnosXML() { //ARCHIVO XML importar
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Seleccionar archivo XML");
         fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos XML", "xml"));
@@ -86,7 +87,7 @@ public class Loader_Export {
         }
     }
     
-    public static void exportAlumnosXML() {
+    public static void exportAlumnosXML() { //XML exportar
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar archivo XML");
         fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos XML", "xml"));
@@ -119,7 +120,7 @@ public class Loader_Export {
             }
         }
     } 
-    public static void loaderCursosJSON() throws ParseException, IOException {
+    public static void loaderCursosJSON() throws ParseException, IOException { // JSON Cargar
     JFileChooser fileChooser = new JFileChooser();
     fileChooser.setDialogTitle("Seleccionar archivo JSON");
     fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos JSON", "json"));
@@ -175,7 +176,94 @@ public class Loader_Export {
         } 
     }
 }
-    public static void asignarEstudiantesMasivo() {
+    public static void guardarCursosJSON() throws IOException { // JSON Guardar
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Guardar archivo JSON");
+    fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos JSON", "json"));
+
+    int seleccion = fileChooser.showSaveDialog(null);
+    if (seleccion == JFileChooser.APPROVE_OPTION) {
+        File archivo = fileChooser.getSelectedFile();
+        if (!archivo.getName().toLowerCase().endsWith(".json")) {
+            archivo = new File(archivo.getParentFile(), archivo.getName() + ".json");
+        }
+
+        try (FileWriter writer = new FileWriter(archivo)) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            JsonArray jsonArray = new JsonArray();
+
+            for (Curso curso : Loginb.Cursos) {
+                JsonObject cursoObject = new JsonObject();
+                cursoObject.addProperty("id", curso.codigo);
+                cursoObject.addProperty("nombre", curso.nombre);
+                cursoObject.addProperty("seccion", curso.seccion);
+                
+                // Formatear las fechas al formato deseado (ISO 8601 en este caso)
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+                cursoObject.addProperty("fecha_inicio", dateFormat.format(curso.fechaIni));
+                cursoObject.addProperty("fecha_fin", dateFormat.format(curso.fechaFin));
+                
+                cursoObject.addProperty("hora_inicio", curso.horaIni);
+                cursoObject.addProperty("hora_fin", curso.horaFin);
+                cursoObject.addProperty("profesor", curso.profesor);
+
+                jsonArray.add(cursoObject);
+            }
+
+            gson.toJson(jsonArray, writer);
+            JOptionPane.showMessageDialog(null, "Cursos guardados exitosamente en JSON.");
+        }
+    }
+}/*
+    public static void guardarCursosJSON() throws IOException {
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Guardar archivo JSON");
+    fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos JSON", "json"));
+
+    int seleccion = fileChooser.showSaveDialog(null);
+    if (seleccion == JFileChooser.APPROVE_OPTION) {
+        File archivo = fileChooser.getSelectedFile();
+        if (!archivo.getName().toLowerCase().endsWith(".json")) {
+            archivo = new File(archivo.getParentFile(), archivo.getName() + ".json");
+        }
+
+        try (FileWriter writer = new FileWriter(archivo)) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            JsonArray jsonArray = new JsonArray();
+
+            for (Curso curso : Loginb.Cursos) {
+                JsonObject cursoObject = new JsonObject();
+                cursoObject.addProperty("id", curso.codigo);
+                cursoObject.addProperty("nombre", curso.nombre);
+                cursoObject.addProperty("seccion", curso.seccion);
+                cursoObject.addProperty("fecha_inicio", dateFormat.format(curso.fechaIni));
+                cursoObject.addProperty("fecha_fin", dateFormat.format(curso.fechaFin));
+                cursoObject.addProperty("hora_inicio", curso.horaIni);
+                cursoObject.addProperty("hora_fin", curso.horaFin);
+                cursoObject.addProperty("profesor", curso.profesor);
+
+                // Agregar alumnos asignados al curso
+                JsonArray alumnosArray = new JsonArray();
+                for (Alumno alumno : curso.Alumnos) {
+                    JsonObject alumnoObject = new JsonObject();
+                    alumnoObject.addProperty("nombre", alumno.nombre);
+                    alumnoObject.addProperty("carne", alumno.carne); 
+                    // Agrega aquí otras propiedades del alumno que quieras guardar
+                    alumnosArray.add(alumnoObject);
+                }
+                cursoObject.add("alumnos", alumnosArray);
+
+                jsonArray.add(cursoObject);
+            }
+
+            gson.toJson(jsonArray, writer);
+            JOptionPane.showMessageDialog(null, "Cursos y alumnos guardados exitosamente en JSON.");
+        }
+    }
+}
+*/
+
+    public static void asignarEstudiantesMasivo() { //archivo .progra1
     JFileChooser fileChooser = new JFileChooser();
     fileChooser.setDialogTitle("Seleccionar archivo .progra1");
     fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos progra1", "progra1"));
@@ -227,7 +315,7 @@ public class Loader_Export {
     }
 }
 
-// Métodos auxiliares (debes implementarlos según tu estructura de datos)
+// Métodos auxiliares
 private static Curso buscarCursoPorId(String idCurso) {
     Curso cursoSeleccionado = null;
     for(Curso e : Loginb.Cursos){
@@ -241,7 +329,7 @@ private static Curso buscarCursoPorId(String idCurso) {
 
 
      
-     public static void loaderProfeCSV() {
+     public static void loaderProfeCSV() { // XML cargar
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Seleccionar archivo CSV");
         fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos CSV", "csv"));
@@ -282,7 +370,7 @@ private static Curso buscarCursoPorId(String idCurso) {
     }
 }
      
-     public static void exportProfeCSV() {
+     public static void exportProfeCSV() { // XML exportar
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar archivo CSV");
             // Crear un FileNameExtensionFilter para archivos CSV sin extensiones
